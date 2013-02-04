@@ -19,7 +19,7 @@ class Thor
         validation_result = (validation =~ value)
       end
       if validation_result.nil? || (validation_result == false)
-        STDERR.puts "Invalid value \"#{value}\" for option:\n  --#{name} #{@banner} #{@description}\n  Message: #{message}"
+        STDERR.puts "Invalid value \"#{value}\" for option:\n  --#{name} #{@banner}   # #{@description}\n  Message: #{message}"
         # TODO print task usage
         exit(1)
       end
@@ -27,6 +27,7 @@ class Thor
   end
 
   class Task
+    # create aliases to methods that will be overwritten
     alias _run run
 
     def run(instance, args=[])
@@ -43,16 +44,7 @@ class Thor
   end
 
   class << self
-    attr_accessor :method_params
-
-    def method_param(name, options)
-      @method_params ||= {}
-      @method_params[name] = options
-    end
-
-    alias param method_param
-
-    # create aliases to methods that are overwritten
+    # create aliases to methods that will be overwritten
     alias _create_task create_task
     alias _method_option method_option
 
@@ -67,7 +59,7 @@ class Thor
       end
     end
 
-    # redefine alias
+    # set previously defined alias to overwritten method
     alias option method_option
   end
 end
